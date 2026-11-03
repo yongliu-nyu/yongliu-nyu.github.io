@@ -1,0 +1,1226 @@
+<meta charset="utf-8">
+<title>Yong Liu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* ── Design tokens ──────────────────────────────────────────────────────
+   Layout: sticky top nav + max-width content column, side gutter via body padding
+   Type: Merriweather (display/headings) + Inter (body/UI)
+   Palette: NYU purple accent, neutral purple-tinted grays
+   ──────────────────────────────────────────────────────────────────── */
+:root {
+  --bg:       #ffffff;
+  --bg2:      #f7f5fb;
+  --bg3:      #ede9f8;
+  --fg:       #17131e;
+  --fg2:      #5a5270;
+  --accent:   #57068c;
+  --accent-h: #6e12a8;
+  --link:     #6818b4;
+  --border:   #ddd8ec;
+  --tag-bg:   #ede9f8;
+  --tag-fg:   #57068c;
+  --badge:    #57068c;
+  --news-bg:  #faf7ff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:       #0f0c15;
+    --bg2:      #1a1524;
+    --bg3:      #261e38;
+    --fg:       #f0ecfb;
+    --fg2:      #9589b5;
+    --accent:   #c084fc;
+    --accent-h: #d8a5fd;
+    --link:     #b870f0;
+    --border:   #2d2547;
+    --tag-bg:   #2e1f4a;
+    --tag-fg:   #c084fc;
+    --badge:    #c084fc;
+    --news-bg:  #160f22;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:       #0f0c15;
+  --bg2:      #1a1524;
+  --bg3:      #261e38;
+  --fg:       #f0ecfb;
+  --fg2:      #9589b5;
+  --accent:   #c084fc;
+  --accent-h: #d8a5fd;
+  --link:     #b870f0;
+  --border:   #2d2547;
+  --tag-bg:   #2e1f4a;
+  --tag-fg:   #c084fc;
+  --badge:    #c084fc;
+  --news-bg:  #160f22;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--bg);
+  z-index: 10;
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-h); }
+
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Nav ── */
+nav {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  z-index: 9;
+  padding-block: 0;
+}
+nav .wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  padding-block: 8px;
+  scrollbar-width: none;
+}
+nav .wrap::-webkit-scrollbar { display: none; }
+nav a {
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg2);
+  padding: 4px 10px;
+  border-radius: 99px;
+  transition: background .15s, color .15s;
+  text-decoration: none;
+}
+nav a:hover { background: var(--bg3); color: var(--fg); }
+
+/* ── Profile header ── */
+.profile {
+  padding: 48px 0 36px;
+  border-bottom: 1px solid var(--border);
+}
+.profile-inner {
+  display: flex;
+  gap: 36px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.profile-text { flex: 1; min-width: 0; }
+.profile-name {
+  font-family: Merriweather, Georgia, serif;
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 6px;
+  color: var(--fg);
+}
+.profile-title {
+  font-size: 15px;
+  color: var(--fg2);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+.profile-title strong { color: var(--fg); font-weight: 600; }
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.chip {
+  background: var(--tag-bg);
+  color: var(--tag-fg);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 99px;
+  letter-spacing: .02em;
+}
+.contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13.5px;
+  color: var(--fg2);
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 4px;
+}
+.contact-list li::before { content: ""; }
+.contact-list .label { font-weight: 500; color: var(--fg); margin-right: 4px; }
+
+.stats-row {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.stat {
+  text-align: center;
+}
+.stat-n {
+  display: block;
+  font-family: Merriweather, Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.stat-l {
+  font-size: 12px;
+  color: var(--fg2);
+  font-weight: 500;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+}
+
+/* ── Sections ── */
+section {
+  padding: 44px 0;
+  border-bottom: 1px solid var(--border);
+}
+section:last-of-type { border-bottom: none; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+h2 {
+  font-family: Merriweather, Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 20px;
+  text-wrap: balance;
+}
+h3 {
+  font-family: Merriweather, Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 4px;
+  text-wrap: balance;
+}
+
+/* ── Research interests ── */
+.interests-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.interest-tag {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13.5px;
+  padding: 6px 14px;
+  color: var(--fg);
+}
+
+/* ── News cards ── */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.news-card {
+  background: var(--news-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.news-date {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.news-card h3 {
+  font-size: 14px;
+  margin: 0;
+  font-family: Merriweather, Georgia, serif;
+  font-weight: 700;
+}
+.news-card p {
+  font-size: 13.5px;
+  color: var(--fg2);
+  margin: 0;
+  line-height: 1.55;
+}
+.news-link {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--link);
+  margin-top: auto;
+}
+
+/* ── Projects ── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 16px;
+}
+.project-card {
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color .2s;
+}
+.project-card:hover { border-color: var(--accent); }
+.project-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  background: var(--tag-bg);
+  color: var(--tag-fg);
+  border-radius: 99px;
+  padding: 2px 8px;
+  align-self: flex-start;
+}
+.project-card h3 { font-size: 15px; margin: 0; }
+.project-card p { font-size: 13.5px; color: var(--fg2); margin: 0; line-height: 1.55; }
+.project-meta { font-size: 12.5px; color: var(--fg2); }
+.project-meta strong { color: var(--fg); }
+.project-link {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--link);
+  margin-top: auto;
+}
+
+/* ── Grants ── */
+.grant-list { display: flex; flex-direction: column; gap: 14px; }
+.grant {
+  border-left: 3px solid var(--accent);
+  padding: 10px 16px;
+  background: var(--bg2);
+  border-radius: 0 8px 8px 0;
+}
+.grant-title { font-weight: 600; font-size: 14px; color: var(--fg); margin-bottom: 2px; }
+.grant-meta { font-size: 13px; color: var(--fg2); }
+.grant-meta .amt { font-weight: 600; color: var(--accent); }
+
+/* ── Publications ── */
+.pub-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  align-items: center;
+}
+.pub-controls input {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  font-size: 13.5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: Inter, system-ui, sans-serif;
+  width: 200px;
+  outline: none;
+}
+.pub-controls input:focus { border-color: var(--accent); }
+.pub-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--fg2);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 99px;
+  cursor: pointer;
+  font-family: Inter, system-ui, sans-serif;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.pub-year-group { margin-bottom: 28px; }
+.pub-year-heading {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 10px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+.pub-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bg3);
+  font-size: 13.5px;
+}
+.pub-item:last-child { border-bottom: none; }
+.pub-title { font-weight: 600; color: var(--fg); margin-bottom: 2px; line-height: 1.4; }
+.pub-title a { color: var(--fg); }
+.pub-title a:hover { color: var(--link); text-decoration: none; }
+.pub-authors { color: var(--fg2); font-size: 13px; margin-bottom: 1px; }
+.pub-venue { color: var(--fg2); font-size: 13px; font-style: italic; }
+.pub-venue .venue-name { font-style: normal; font-weight: 500; color: var(--fg); }
+.pub-badges { display: inline-flex; gap: 4px; margin-left: 8px; }
+.pub-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 1px 6px;
+  border-radius: 99px;
+  vertical-align: middle;
+}
+.pub-badge.award { background: #fef3c7; color: #92400e; }
+.pub-badge.award-dark { background: #292109; color: #fde68a; }
+.pub-badge.new { background: var(--tag-bg); color: var(--tag-fg); }
+.pub-count {
+  font-size: 13.5px;
+  color: var(--fg2);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.older-pub-note {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 13.5px;
+  color: var(--fg2);
+  margin-top: 8px;
+}
+.older-pub-note strong { color: var(--fg); }
+
+/* ── Students ── */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.student-card {
+  background: var(--bg2);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.student-name { font-weight: 600; font-size: 14px; color: var(--fg); }
+.student-info { font-size: 12.5px; color: var(--fg2); margin-top: 2px; }
+
+.alumni-list {
+  font-size: 13.5px;
+  columns: 2;
+  column-gap: 32px;
+  color: var(--fg2);
+}
+@media (max-width: 480px) { .alumni-list { columns: 1; } }
+.alumni-list li { margin-bottom: 6px; list-style: none; padding-left: 0; }
+.alumni-name { font-weight: 600; color: var(--fg); }
+.alumni-placement { color: var(--accent); font-size: 12px; font-style: italic; }
+
+/* ── Awards ── */
+.award-list { display: flex; flex-direction: column; gap: 8px; }
+.award-item { display: flex; gap: 14px; align-items: baseline; font-size: 14px; }
+.award-year {
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  min-width: 32px;
+}
+
+/* ── Service ── */
+.service-group { margin-bottom: 20px; }
+.service-group h3 { font-size: 14px; font-family: Inter, sans-serif; color: var(--fg2); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+.service-list { list-style: none; padding: 0; margin: 0; font-size: 13.5px; }
+.service-list li { padding: 4px 0; border-bottom: 1px solid var(--bg3); color: var(--fg); }
+.service-list li:last-child { border-bottom: none; }
+
+/* ── Footer ── */
+footer {
+  padding: 28px 0;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--fg2);
+  text-align: center;
+}
+footer a { color: var(--fg2); }
+
+/* ── Utility ── */
+.hidden-pub { display: none; }
+
+@media (max-width: 600px) {
+  .stats-row { gap: 16px; }
+  .profile { padding: 32px 0 24px; }
+  .news-grid { grid-template-columns: 1fr; }
+  .projects-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<!-- Navigation -->
+<nav>
+  <div class="wrap">
+    <a href="#research">Research</a>
+    <a href="#news">News</a>
+    <a href="#projects">Projects</a>
+    <a href="#funding">Funding</a>
+    <a href="#publications">Publications</a>
+    <a href="#students">Students</a>
+    <a href="#awards">Awards</a>
+    <a href="#service">Service</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- Profile -->
+<div class="profile" id="top">
+  <div class="profile-inner">
+    <div class="profile-text">
+      <h1 class="profile-name">Yong Liu</h1>
+      <p class="profile-title">
+        <strong>Professor</strong>, Department of Electrical &amp; Computer Engineering<br>
+        NYU Tandon School of Engineering &middot; Director of Graduate Programs<br>
+        Affiliated: <a href="https://catt.nyu.edu">CATT</a> &middot; <a href="https://wireless.engineering.nyu.edu">NYU WIRELESS</a>
+      </p>
+      <div class="chips">
+        <span class="chip">IEEE Fellow</span>
+        <span class="chip">ACM Member</span>
+        <span class="chip">NSF CAREER Awardee</span>
+      </div>
+      <ul class="contact-list">
+        <li><span class="label">Email</span>yongliu [at] nyu.edu</li>
+        <li><span class="label">Phone</span>646.997.3959</li>
+        <li><span class="label">Office</span>370 Jay St, Room 954, Brooklyn NY</li>
+        <li><span class="label">Links</span>
+          <a href="https://scholar.google.com/citations?user=aPlMXLAAAAAJ">Google Scholar</a> &middot;
+          <a href="https://engineering.nyu.edu/faculty/yong-liu">NYU Profile</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Research Interests -->
+<section id="research">
+  <p class="section-label">Research</p>
+  <h2>Research Interests</h2>
+  <div class="interests-grid">
+    <span class="interest-tag">Network Modeling &amp; Optimization</span>
+    <span class="interest-tag">Immersive Video Streaming (360°, Point Cloud)</span>
+    <span class="interest-tag">Edge Caching &amp; Content Delivery</span>
+    <span class="interest-tag">Federated &amp; Distributed Machine Learning</span>
+    <span class="interest-tag">Next-Generation Wireless Networks (5G/6G)</span>
+    <span class="interest-tag">Satellite &amp; Aerial Networks (LEO, UAV)</span>
+    <span class="interest-tag">Network Traffic Engineering</span>
+    <span class="interest-tag">Online Social Networks &amp; Recommender Systems</span>
+    <span class="interest-tag">P2P &amp; Overlay Networks</span>
+  </div>
+</section>
+
+<!-- Recent News -->
+<section id="news">
+  <p class="section-label">2024–2025</p>
+  <h2>Recent Highlights</h2>
+  <div class="news-grid">
+    <div class="news-card">
+      <span class="news-date">Oct 2026 &middot; Submitted</span>
+      <h3>VINES: FALCON — Drone Wireless Connectivity</h3>
+      <p>NYU Tandon-led $4.7M NSF VINES project developing adaptive wireless technology to keep drone swarms connected under interference and mobility.</p>
+      <a class="news-link" href="https://engineering.nyu.edu/news/nyu-tandon-led-team-developing-wireless-technology-keep-drones-connected" target="_blank">Read news article →</a>
+    </div>
+    <div class="news-card">
+      <span class="news-date">Apr 2025 &middot; ACM MMSys</span>
+      <h3>CellSight: FoV Prediction for Point Cloud Streaming</h3>
+      <p>New field-of-view prediction method for point-cloud video, achieving up to 7× bandwidth reduction. Code released as CellSight. (with Chen Li, Tongyu Zong, Yueyu Hu, Yao Wang)</p>
+      <a class="news-link" href="https://nyuvideolab.github.io/DanceNet3D/" target="_blank">Visit project site →</a>
+    </div>
+    <div class="news-card">
+      <span class="news-date">Mar 2025 &middot; AAAI</span>
+      <h3>Cached-DFL: Federated Learning for Self-Driving Cars</h3>
+      <p>Decentralized federated learning with model caching on mobile agents — tackling connectivity and data heterogeneity in autonomous vehicle networks. (with Xiaoyu Wang, Guojun Xiong, Jian Li, Houwei Cao)</p>
+      <a class="news-link" href="https://scholar.google.com/citations?user=aPlMXLAAAAAJ" target="_blank">See on Google Scholar →</a>
+    </div>
+    <div class="news-card">
+      <span class="news-date">Nov 2025 &middot; IEEE/ACM ToN</span>
+      <h3>DeeP-TE: Data-Enabled Predictive Traffic Engineering</h3>
+      <p>Learning-based approach to predictive traffic engineering, combining model-based and data-driven methods for scalable multi-flow, multi-channel routing. (with Zhun Yin, Xiaotian Li, Lifan Mei, Zhong-Ping Jiang)</p>
+    </div>
+    <div class="news-card">
+      <span class="news-date">2023–2025 &middot; Active</span>
+      <h3>NSF NeTS: Point Cloud Video Coding &amp; Streaming</h3>
+      <p>$1.22M NSF grant for object-centric, view-adaptive progressive coding and streaming of point cloud video, including a dance-education testbed.</p>
+      <a class="news-link" href="https://nyuvideolab.github.io/DanceNet3D/" target="_blank">DanceNet3D project →</a>
+    </div>
+    <div class="news-card">
+      <span class="news-date">2023 &middot; IEEE/ACM SEC</span>
+      <h3>Best Paper Candidate: Traffic Engineering at the Edge</h3>
+      <p>Fast computation flow restoration with path-based two-stage traffic engineering, recognized as Best Paper Candidate at the IEEE/ACM Symposium on Edge Computing. (with Xiaotian Li)</p>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+  <p class="section-label">Research Projects</p>
+  <h2>Active Projects</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <span class="project-badge">NSF VINES &middot; 2025–</span>
+      <h3>FALCON — Aerial Wireless for Drones</h3>
+      <p>Flexible Aerial Links for Control, Observation, and Navigation. Develops intelligent multi-frequency wireless systems that let drone swarms dynamically adapt to interference and relay signals across networks.</p>
+      <div class="project-meta"><strong>Lead PI</strong>: Sundeep Rangan &nbsp;&middot;&nbsp; co-PI: Yong Liu (multipath networking)</div>
+      <a class="project-link" href="https://engineering.nyu.edu/news/nyu-tandon-led-team-developing-wireless-technology-keep-drones-connected" target="_blank">Read project news →</a>
+      <a class="project-link" href="https://www.youtube.com/watch?v=zkoxwdPACqs" target="_blank">▶ Watch project overview video →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-badge">NSF NeTS &middot; 2023–2027</span>
+      <h3>DanceNet3D — Point Cloud Video Streaming</h3>
+      <p>Object-centric, view-adaptive and progressive coding and streaming of point cloud video. Includes a dance-education testbed for immersive 3D performance capture and delivery.</p>
+      <div class="project-meta"><strong>PI</strong>: Yong Liu &nbsp;&middot;&nbsp; co-PI: Yao Wang, Roger DuBois</div>
+      <a class="project-link" href="https://nyuvideolab.github.io/DanceNet3D/" target="_blank">nyuvideolab.github.io/DanceNet3D →</a>
+    </div>
+    <div class="project-card">
+      <span class="project-badge">NSF RINGS &middot; 2022–2026</span>
+      <h3>RINGS — Resilient Edge Networks</h3>
+      <p>Hybrid data-driven and model-based learning for resilient wireless edge networks. Addresses robustness to wireless dynamics, topology changes, and traffic variability in next-generation networks.</p>
+      <div class="project-meta"><strong>Lead PI</strong>: Yong Liu &nbsp;&middot;&nbsp; co-PIs: Zhongping Jiang, Jian Li, Pei Liu, Shiv Panwar</div>
+      <a class="project-link" href="https://wp.nyu.edu/tandonschoolofengineering-rings/" target="_blank">View RINGS project site →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Funding -->
+<section id="funding">
+  <p class="section-label">Research Funding</p>
+  <h2>Selected Grants</h2>
+  <div class="grant-list">
+    <div class="grant">
+      <div class="grant-title">Object-Centric, View-Adaptive and Progressive Coding and Streaming of Point Cloud Video</div>
+      <div class="grant-meta">NSF NeTS &middot; <span class="amt">$1,220,000</span> &middot; 10/2023 – 09/2027 &middot; Lead PI (co-PIs: Yao Wang, Roger DuBois)</div>
+    </div>
+    <div class="grant">
+      <div class="grant-title">RINGS: Resilient Edge Networks with Data-driven Model-based Learning</div>
+      <div class="grant-meta">NSF RINGS &middot; <span class="amt">$1,079,960</span> &middot; 05/2022 – 08/2026 &middot; Lead PI (co-PIs: Z. Jiang, J. Li, P. Liu, S. Panwar)</div>
+    </div>
+    <div class="grant">
+      <div class="grant-title">VINES: FALCON — Flexible Aerial Links for Control, Observation, and Navigation</div>
+      <div class="grant-meta">NSF VINES &middot; <span class="amt">$4,700,000 (project total)</span> &middot; 2025– &middot; Co-PI (Lead PI: Sundeep Rangan)</div>
+    </div>
+  </div>
+</section>
+
+<!-- Publications -->
+<section id="publications">
+  <p class="section-label">Scholarship</p>
+  <h2>Publications</h2>
+  <div class="pub-controls">
+    <input type="search" id="pubSearch" placeholder="Search publications…" oninput="filterPubs()">
+    <div class="pub-filters" id="pubFilters">
+      <button class="filter-btn active" data-cat="all" onclick="setFilter(this,'all')">All</button>
+      <button class="filter-btn" data-cat="journal" onclick="setFilter(this,'journal')">Journal</button>
+      <button class="filter-btn" data-cat="conference" onclick="setFilter(this,'conference')">Conference</button>
+    </div>
+  </div>
+
+  <div id="pubList">
+
+  <!-- ── 2026 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2026</div>
+
+    <div class="pub-item" data-cat="journal" data-text="beyond bandwidth equality balancing efficacy fairness retention multi-user vr video streaming bowei xu wenjing su jinyang li wenhao wu hao chen yong liu zhan ma ieee transactions on multimedia 2026">
+      <div class="pub-title">Beyond Bandwidth Equality: Balancing Efficacy, Fairness, and Retention in Multi-user VR Video Streaming <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Bowei Xu, Wenjing Su, Jinyang Li, Wenhao Wu, Hao Chen, Yong Liu, Zhan Ma</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, October 2026</div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="parse pid-guided partial alignment multimodal decentralized federated learning yanhang shi xiaoyu wang houwei cao jian li yong liu arxiv 2026">
+      <div class="pub-title">PID-Guided Partial Alignment for Multimodal Decentralized Federated Learning (PARSE) <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Yanhang Shi, Xiaoyu Wang, Houwei Cao, Jian Li, Yong Liu</div>
+      <div class="pub-venue">arXiv preprint, January 2026. <a href="https://arxiv.org/abs/2601.10012" target="_blank">arxiv.org/abs/2601.10012</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="chuckle curriculum learning speech emotion recognition human perception ankush pratap singh houwei cao yong liu interspeech 2026">
+      <div class="pub-title">CHUCKLE: When Humans Teach AI to Learn Emotions the Easy Way <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Ankush Pratap Singh, Houwei Cao, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">Interspeech 2026</span>. <a href="https://arxiv.org/abs/2510.09382" target="_blank">arXiv:2510.09382</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="spice synergy partial information curriculum evolution ankush pratap singh houwei cao yong liu icmi international conference multimodal interaction 2026">
+      <div class="pub-title">SPICE: Synergy and Partial Information Based Curriculum Evolution <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Ankush Pratap Singh, Houwei Cao, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">28th ACM International Conference on Multimodal Interaction (ICMI)</span>, 2026. <a href="https://dl.acm.org/doi/10.1145/3776574.3831187" target="_blank">ACM DL</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="modaic coordinated asynchrony decentralized multimodal learning yanhang shi xiaoyu wang houwei cao jian li yong liu arxiv 2026">
+      <div class="pub-title">MODAIC: Coordinated Asynchrony for Decentralized Multimodal Learning <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Yanhang Shi, Xiaoyu Wang, Houwei Cao, Jian Li, Yong Liu</div>
+      <div class="pub-venue">arXiv preprint, October 2026. <a href="https://arxiv.org/abs/2610.16987" target="_blank">arxiv.org/abs/2610.16987</a></div>
+    </div>
+  </div>
+
+  <!-- ── 2025 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2025</div>
+
+    <div class="pub-item" data-cat="conference" data-text="adf-lora alternating low-rank aggregation decentralized federated fine-tuning xiaoyu wang xiaotian li zhixiang zhou chen li yong liu arxiv 2025">
+      <div class="pub-title">ADF-LoRA: Alternating Low-Rank Aggregation for Decentralized Federated Fine-Tuning <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Xiaoyu Wang, Xiaotian Li, Zhixiang Zhou, Chen Li, Yong Liu</div>
+      <div class="pub-venue">arXiv preprint, November 2025. <a href="https://arxiv.org/abs/2511.18291" target="_blank">arxiv.org/abs/2511.18291</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="deep-te data-enabled predictive traffic engineering zhun yin xiaotian li lifan mei yong liu zhong-ping jiang ieee/acm transactions on networking ton 2025">
+      <div class="pub-title">DeeP-TE: Data-Enabled Predictive Traffic Engineering <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Zhun Yin, Xiaotian Li, Lifan Mei, Yong Liu, Zhong-Ping Jiang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE/ACM Transactions on Networking</span>, November 2025</div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="coffee cost-effective edge caching live 360 degree video streaming chen li tingwei ye tongyu zong liyang sun houwei cao yong liu computer networks 2025">
+      <div class="pub-title">Coffee: Cost-effective Edge Caching for Live 360 Degree Video Streaming <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Chen Li, Tingwei Ye, Tongyu Zong, Liyang Sun, Houwei Cao, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">Computer Networks</span>, Volume 269, September 2025</div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="robust lyapunov optimization leo satellite networks routing control zhemin huang zhong-ping jiang zhu han yong liu ieee transactions on mobile computing tmc 2025">
+      <div class="pub-title">Robust Lyapunov Optimization for LEO Satellite Networks Routing Control <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Zhemin Huang, Zhong-Ping Jiang, Zhu Han, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Mobile Computing</span>, July 2025</div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="progressive frame patching fov-based point cloud video streaming tongyu zong yixiang mao chen li yong liu yao wang ieee transactions on multimedia tmm 2025">
+      <div class="pub-title">Progressive Frame Patching for FoV-based Point Cloud Video Streaming <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Tongyu Zong, Yixiang Mao, Chen Li, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, May 2025</div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="routing optimization networks embedded computational services lifan mei jinrui gou jingrui yang yujin cai yong liu ieee transactions on network and service management tnsm 2025">
+      <div class="pub-title">On Routing Optimization in Networks with Embedded Computational Services <span class="pub-badges"><span class="pub-badge new">New</span></span></div>
+      <div class="pub-authors">Lifan Mei, Jinrui Gou, Jingrui Yang, Yujin Cai, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Network and Service Management</span>, February 2025</div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="scalable multi-flow multi-channel traffic steering hybrid learning xiaotian li yong liu shivendra panwar shu-ping yeh acm sigmetrics workshop 2025">
+      <div class="pub-title">On Scalable Multi-flow and Multi-channel Traffic Steering through Hybrid Learning</div>
+      <div class="pub-authors">Xiaotian Li, Yong Liu, Shivendra Panwar, Shu-ping Yeh</div>
+      <div class="pub-venue"><span class="venue-name">ACM SIGMETRICS Workshop on AI Crossroads</span>, Performance Evaluation Review 53(2), 2025</div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="cellsight spatial visibility temporal dynamics field of view prediction adaptive point cloud video streaming chen li tongyu zong yueyu hu yong liu yao wang acm mmsys multimedia systems 2025">
+      <div class="pub-title">Spatial Visibility and Temporal Dynamics: Rethinking Field of View Prediction in Adaptive Point Cloud Video Streaming (CellSight)</div>
+      <div class="pub-authors">Chen Li, Tongyu Zong, Yueyu Hu, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">16th ACM Multimedia Systems Conference (MMSys)</span>, April 2025</div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="cached-dfl decentralized federated learning model caching mobile agents xiaoyu wang guojun xiong houwei cao jian li yong liu aaai conference artificial intelligence 2025">
+      <div class="pub-title">Decentralized Federated Learning with Model Caching on Mobile Agents (Cached-DFL)</div>
+      <div class="pub-authors">Xiaoyu Wang, Guojun Xiong, Houwei Cao, Jian Li, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">AAAI Conference on Artificial Intelligence</span>, March 2025</div>
+    </div>
+  </div>
+
+  <!-- ── 2024 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2024</div>
+
+    <div class="pub-item" data-cat="conference" data-text="robust lyapunov optimization multihop communication leo satellite networks zhemin huang zhongping jiang zhu han yong liu wisee 2024">
+      <div class="pub-title">Robust Lyapunov Optimization for Multihop Communication in LEO Satellite Networks</div>
+      <div class="pub-authors">Zhemin Huang, Zhongping Jiang, Zhu Han, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">12th IEEE International Conference on Wireless for Space and Extreme Environments (WiSEE)</span>, 2024</div>
+    </div>
+  </div>
+
+  <!-- ── 2023 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2023</div>
+
+    <div class="pub-item" data-cat="journal" data-text="predictive edge caching deep mining sequential patterns user content retrievals chen li xiaoyu wang tongyu zong houwei cao yong liu elsevier computer networks 2023">
+      <div class="pub-title">Predictive Edge Caching Through Deep Mining Of Sequential Patterns In User Content Retrievals</div>
+      <div class="pub-authors">Chen Li, Xiaoyu Wang, Tongyu Zong, Houwei Cao, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">Elsevier Computer Networks</span>, Volume 233, September 2023. <a href="https://doi.org/10.1016/j.comnet.2023.109866" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="fast computation flow restoration path-based two-stage traffic engineering xiaotian li yong liu ieee acm symposium edge computing sec 2023 best paper candidate">
+      <div class="pub-title">Fast Computation Flow Restoration with Path-Based Two-Stage Traffic Engineering <span class="pub-badges"><span class="pub-badge award">Best Paper Candidate</span></span></div>
+      <div class="pub-authors">Xiaotian Li, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE/ACM Symposium on Edge Computing (SEC)</span>, pp. 215–227, 2023</div>
+    </div>
+  </div>
+
+  <!-- ── 2022 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2022</div>
+
+    <div class="pub-item" data-cat="journal" data-text="cocktail edge caching ride dynamic trends content popularity ensemble learning tongyu zong chen li yuanyuan lei guangyu li houwei cao yong liu ieee/acm transactions on networking ton 2022">
+      <div class="pub-title">Cocktail Edge Caching: Ride Dynamic Trends of Content Popularity with Ensemble Learning</div>
+      <div class="pub-authors">Tongyu Zong, Chen Li, Yuanyuan Lei, Guangyu Li, Houwei Cao, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE/ACM Transactions on Networking</span>, August 2022. <a href="https://doi.org/10.1109/TNET.2022.3193680" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="live 360 degree video delivery user collaboration streaming flock liyang sun yixiang mao tongyu zong yong liu yao wang ieee transactions on multimedia tmm 2022">
+      <div class="pub-title">Live 360 Degree Video Delivery based on User Collaboration in a Streaming Flock</div>
+      <div class="pub-authors">Liyang Sun, Yixiang Mao, Tongyu Zong, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, February 2022. <a href="https://doi.org/10.1109/TMM.2022.3149642" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="realtime mobile bandwidth handoff predictions 4g 5g networks lifan mei jinrui gou yujing cai houwei cao yong liu elsevier computer networks 2022">
+      <div class="pub-title">Realtime Mobile Bandwidth and Handoff Predictions in 4G/5G Networks</div>
+      <div class="pub-authors">Lifan Mei, Jinrui Gou, Yujing Cai, Houwei Cao, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">Elsevier Computer Networks</span>, Volume 204, February 2022. <a href="https://doi.org/10.1016/j.comnet.2021.108736" target="_blank">DOI</a></div>
+    </div>
+  </div>
+
+  <!-- ── 2021 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2021</div>
+
+    <div class="pub-item" data-cat="journal" data-text="towards optimal low-latency live video streaming liyang sun tongyu zong siquan wang yong liu yao wang ieee/acm transactions on networking ton 2021">
+      <div class="pub-title">Towards Optimal Low-latency Live Video Streaming</div>
+      <div class="pub-authors">Liyang Sun, Tongyu Zong, Siquan Wang, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE/ACM Transactions on Networking</span>, Vol. 29, No. 5, pp. 2327–2338, Oct. 2021. <a href="https://doi.org/10.1109/TNET.2021.3087625" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="user behavior fingerprinting multi-item-sets iptv viewer identification can yang lan wang houwei cao qihu yuan yong liu ieee transactions on information forensics security tifs 2021">
+      <div class="pub-title">User Behavior Fingerprinting with Multi-Item-Sets and Its Application in IPTV Viewer Identification</div>
+      <div class="pub-authors">Can Yang, Lan Wang, Houwei Cao, Qihu Yuan, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Information Forensics &amp; Security</span>, Volume 16, January 2021. <a href="https://doi.org/10.1109/TIFS.2021.3055638" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="tightrope walking low-latency live streaming joint adaption video rate playback speed liyang sun tongyu zong siquan wang yong liu yao wang mmsys multimedia systems 2021">
+      <div class="pub-title">Tightrope Walking in Low-latency Live Streaming: Joint Adaption of Video Rate and Playback Speed</div>
+      <div class="pub-authors">Liyang Sun, Tongyu Zong, Siquan Wang, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">ACM Multimedia Systems Conference (MMSys)</span>, 2021 (acceptance ratio: 33%)</div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="cocktail edge caching dynamic trends content popularity ensemble learning tongyu zong chen li yuanyuan lei guangyu li houwei cao yong liu infocom 2021">
+      <div class="pub-title">Cocktail Edge Caching: Ride Dynamic Trends of Content Popularity with Ensemble Learning</div>
+      <div class="pub-authors">Tongyu Zong, Chen Li, Yuanyuan Lei, Guangyu Li, Houwei Cao, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE INFOCOM</span>, 2021 (acceptance ratio: 19.9%)</div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="reinforced ilqr sample-efficient robot locomotion learning tongyu zong liyang sun yong liu ieee icra robotics automation 2021">
+      <div class="pub-title">Reinforced iLQR: A Sample-Efficient Robot Locomotion Learning</div>
+      <div class="pub-authors">Tongyu Zong, Liyang Sun, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE International Conference on Robotics and Automation (ICRA)</span>, 2021</div>
+    </div>
+  </div>
+
+  <!-- ── 2020 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2020</div>
+
+    <div class="pub-item" data-cat="journal" data-text="realtime mobile bandwidth prediction lstm neural network bayesian fusion lifan mei runchen hu houwei cao yong liu zifa han feng li jin li elsevier computer networks 2020">
+      <div class="pub-title">Realtime Mobile Bandwidth Prediction using LSTM Neural Network and Bayesian Fusion</div>
+      <div class="pub-authors">Lifan Mei, Runchen Hu, Houwei Cao, Yong Liu, Zifa Han, Feng Li, Jin Li</div>
+      <div class="pub-venue"><span class="venue-name">Elsevier Computer Networks</span>, Volume 182, December 2020. <a href="https://doi.org/10.1016/j.comnet.2020.107515" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="iptv channel zapping recommendation attention mechanism guangyu li lina qiu chenguang yu houwei cao yong liu can yang ieee transactions on multimedia tmm 2020">
+      <div class="pub-title">IPTV Channel Zapping Recommendation With Attention Mechanism</div>
+      <div class="pub-authors">Guangyu Li, Lina Qiu, Chenguang Yu, Houwei Cao, Yong Liu, Can Yang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, Volume 23, April 2020. <a href="https://doi.org/10.1109/TMM.2020.2984094" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="low-latency fov-adaptive coding streaming interactive 360 video yixiang mao liyang sun yong liu yao wang acm multimedia 2020">
+      <div class="pub-title">Low-latency FoV-adaptive Coding and Streaming for Interactive 360° Video Streaming</div>
+      <div class="pub-authors">Yixiang Mao, Liyang Sun, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">ACM International Conference on Multimedia (ACM MM)</span>, 2020 (acceptance ratio: 27%). <a href="https://doi.org/10.1145/3394171.3413751" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="flocking-based live streaming 360-degree video liyang sun yixiang mao tongyu zong yong liu yao wang mmsys 2020">
+      <div class="pub-title">Flocking-based Live Streaming of 360-Degree Video</div>
+      <div class="pub-authors">Liyang Sun, Yixiang Mao, Tongyu Zong, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">11th ACM Multimedia Systems Conference (MMSys)</span>, pp. 26–37, 2020 (acceptance ratio: 33%). <a href="https://doi.org/10.1145/3339825.3391856" target="_blank">DOI</a></div>
+    </div>
+  </div>
+
+  <!-- ── 2019 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2019</div>
+
+    <div class="pub-item" data-cat="journal" data-text="group popularity prediction event-based social networks guangyu li yong liu bruno ribeiro ieee transactions on network science and engineering tnse 2019">
+      <div class="pub-title">On Group Popularity Prediction in Event-Based Social Networks</div>
+      <div class="pub-authors">Guangyu Li, Yong Liu, Bruno Ribeiro</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Network Science and Engineering</span>, May 2019</div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="two-tier system on-demand streaming 360 degree video dynamic networks liyang sun fanyi duanmu yong liu yao wang hang shi yinghua ye david dai ieee journal emerging selected topics circuits systems jetcas 2019">
+      <div class="pub-title">Two-Tier System for On-Demand Streaming of 360 Degree Video over Dynamic Networks</div>
+      <div class="pub-authors">Liyang Sun, Fanyi Duanmu, Yong Liu, Yao Wang, Hang Shi, Yinghua Ye, David Dai</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Journal on Emerging and Selected Topics in Circuits and Systems</span>, Volume 9, Issue 1, March 2019. <a href="https://doi.org/10.1109/JETCAS.2019.2898877" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="optimal strategies live video streaming low-latency regime liyang sun tongyu zong yong liu yao wang haihong zhu icnp network protocols 2019">
+      <div class="pub-title">Optimal Strategies for Live Video Streaming in the Low-latency Regime [Short Paper]</div>
+      <div class="pub-authors">Liyang Sun, Tongyu Zong, Yong Liu, Yao Wang, Haihong Zhu</div>
+      <div class="pub-venue"><span class="venue-name">27th IEEE International Conference on Network Protocols (ICNP)</span>, October 2019</div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="realtime mobile bandwidth prediction lstm neural networks lifan mei runchen hu houwei cao yong liu zifa han feng li jin li passive active measurement pam 2019">
+      <div class="pub-title">Realtime Mobile Bandwidth Prediction using LSTM Neural Networks</div>
+      <div class="pub-authors">Lifan Mei, Runchen Hu, Houwei Cao, Yong Liu, Zifa Han, Feng Li, Jin Li</div>
+      <div class="pub-venue"><span class="venue-name">Passive and Active Measurement (PAM) Conference</span>, March 2019 (acceptance ratio: 27%)</div>
+    </div>
+  </div>
+
+  <!-- ── 2018 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2018</div>
+
+    <div class="pub-item" data-cat="journal" data-text="personalized channel recommendation deep learning switch sequence can yang sixuan ren yong liu houwei cao qihu yuan guoqiang han ieee access 2018">
+      <div class="pub-title">Personalized Channel Recommendation Deep Learning From a Switch Sequence</div>
+      <div class="pub-authors">Can Yang, Sixuan Ren, Yong Liu, Houwei Cao, Qihu Yuan, Guoqiang Han</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Access</span>, September 2018. <a href="https://doi.org/10.1109/ACCESS.2018.2869470" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="wilitv reducing live satellite tv costs wireless relays rajeev kumar robest margolies rittwik jana yong liu shivendra panwar ieee journal selected areas communications jsac 2018">
+      <div class="pub-title">WiLiTV: Reducing Live Satellite TV Costs using Wireless Relays</div>
+      <div class="pub-authors">Rajeev Kumar, Robest Margolies, Rittwik Jana, Yong Liu, Shivendra Panwar</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Journal on Selected Areas in Communications</span>, February 2018. <a href="https://doi.org/10.1109/JSAC.2018.2804040" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="recommendation changing world exploiting temporal dynamics ratings reviews yining liu yong liu yanming shen keqiu li acm transactions web tow 2018">
+      <div class="pub-title">Recommendation in a Changing World: Exploiting Temporal Dynamics in Ratings and Reviews</div>
+      <div class="pub-authors">Yining Liu, Yong Liu, Yanming Shen, Keqiu Li</div>
+      <div class="pub-venue"><span class="venue-name">ACM Transactions on the Web</span>, Volume 12, Issue 1, February 2018. <a href="https://doi.org/10.1145/3108238" target="_blank">DOI</a></div>
+    </div>
+  </div>
+
+  <!-- ── 2017 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2017</div>
+
+    <div class="pub-item" data-cat="journal" data-text="perceptual quality maximization video calls packet losses fec frame rate quantization eymen kurdoglu yong liu yao wang ieee transactions multimedia tmm 2017">
+      <div class="pub-title">Perceptual Quality Maximization for Video Calls with Packet Losses by Optimizing FEC, Frame Rate and Quantization</div>
+      <div class="pub-authors">Eymen Kurdoglu, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, December 2017. <a href="https://doi.org/10.1109/tmm.2017.2781362" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="collaborative filtering recommendation online social voting xiwang yang chao liang miao zhao hongwei wang hao ding yong liu yang li junlin zhang ieee transactions computational social systems tcss 2017">
+      <div class="pub-title">Collaborative Filtering Based Recommendation of Online Social Voting</div>
+      <div class="pub-authors">Xiwang Yang, Chao Liang, Miao Zhao, Hongwei Wang, Hao Ding, Yong Liu et al.</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions On Computational Social Systems</span>, Volume 4, Issue 1, March 2017. <a href="https://doi.org/10.1109/TCSS.2017.2665122" target="_blank">DOI</a></div>
+    </div>
+  </div>
+
+  <!-- ── 2016 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2016</div>
+
+    <div class="pub-item" data-cat="journal" data-text="sdn state inconsistency verification openstack yang xu yong liu rahul singh shu tao elsevier computer networks 2016">
+      <div class="pub-title">SDN State Inconsistency Verification in OpenStack</div>
+      <div class="pub-authors">Yang Xu, Yong Liu, Rahul Singh, Shu Tao</div>
+      <div class="pub-venue"><span class="venue-name">Elsevier Computer Networks</span>, Volume 110, December 2016. <a href="https://doi.org/10.1016/j.comnet.2016.09.014" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="agile smooth video adaptation http adaptive streaming hls guibin tian yong liu ieee/acm transactions on networking ton 2016">
+      <div class="pub-title">Towards Agile and Smooth Video Adaptation in HTTP Adaptive Streaming</div>
+      <div class="pub-authors">Guibin Tian, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE/ACM Transactions on Networking</span>, Volume 24, Number 4, August 2016. <a href="https://doi.org/10.1109/TNET.2015.2464700" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="thwarting privacy protection location-based social discovery services minhui xue yong liu keith ross haifeng qian wiley security communication networks 2016">
+      <div class="pub-title">Thwarting Privacy Protection on Location-Based Social Discovery Services</div>
+      <div class="pub-authors">Minhui Xue, Yong Liu, Keith Ross, Haifeng Qian</div>
+      <div class="pub-venue"><span class="venue-name">Wiley Security and Communication Networks</span>, Volume 9, Issue 11, July 2016. <a href="https://doi.org/10.1002/sec.1438" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="dealing user heterogeneity p2p multi-party video conferencing layered distribution partitioned simulcast eymen kurdoglu yong liu yao wang ieee transactions multimedia tmm 2016">
+      <div class="pub-title">Dealing with User Heterogeneity in P2P Multi-party Video Conferencing: Layered Distribution vs. Partitioned Simulcast</div>
+      <div class="pub-authors">Eymen Kurdoglu, Yong Liu, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, Volume 18, Number 1, January 2016. <a href="https://doi.org/10.1109/TMM.2015.2496872" target="_blank">DOI</a></div>
+    </div>
+  </div>
+
+  <!-- ── 2015 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2015</div>
+
+    <div class="pub-item" data-cat="journal" data-text="playing high-end video games cloud measurement study zheng xue di wu jian he xiaojun hei yong liu ieee transactions circuits systems video technology tcsvt 2015">
+      <div class="pub-title">Playing High-End Video Games in the Cloud: A Measurement Study</div>
+      <div class="pub-authors">Zheng Xue, Di Wu, Jian He, Xiaojun Hei, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Circuits and Systems for Video Technology</span>, Volume 25, Number 12, December 2015. <a href="https://doi.org/10.1109/TCSVT.2014.2364419" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="short channel switching delay playback lag ip-based tv systems can yang yong liu ieee transactions multimedia tmm 2015">
+      <div class="pub-title">On Achieving Short Channel Switching Delay and Playback Lag in IP-Based TV Systems</div>
+      <div class="pub-authors">Can Yang, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, Volume 17, Number 7, July 2015. <a href="https://doi.org/10.1109/TMM.2015.2429552" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="r2nc robust inter-session network coding lossy wireless networks long hai hongyu wang jie wang zhenzhou tang yong liu iet communications 2015">
+      <div class="pub-title">R²NC: Robust Inter-session Network Coding in Lossy Wireless Networks</div>
+      <div class="pub-authors">Long Hai, Hongyu Wang, Jie Wang, Zhenzhou Tang, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IET Communications</span>, Volume 9, Issue 2, January 2015. <a href="https://doi.org/10.1049/iet-com.2014.0079" target="_blank">DOI</a></div>
+    </div>
+  </div>
+
+  <!-- ── 2014 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2014</div>
+
+    <div class="pub-item" data-cat="journal" data-text="video telephony end-consumers measurement study google+ ichat skype yang xu chenguang yu jingjiang li yong liu ieee/acm transactions networking ton 2014">
+      <div class="pub-title">Video Telephony for End-consumers: Measurement Study of Google+, iChat, and Skype</div>
+      <div class="pub-authors">Yang Xu, Chenguang Yu, Jingjiang Li, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE/ACM Transactions on Networking</span>, Volume 22, Number 3, June 2014. <a href="https://doi.org/10.1109/TNET.2013.2260354" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="survey collaborative filtering social recommender systems xiwang yang yang guo yong liu harald steck elsevier computer communications 2014">
+      <div class="pub-title">A Survey of Collaborative Filtering Based Social Recommender Systems <span class="pub-badges"><span class="pub-badge award">275 citations</span></span></div>
+      <div class="pub-authors">Xiwang Yang, Yang Guo, Yong Liu, Harald Steck</div>
+      <div class="pub-venue"><span class="venue-name">Elsevier Computer Communications</span>, Volume 41, March 2014. <a href="https://doi.org/10.1016/j.comcom.2013.06.009" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="enabling p2p one-view multi-party video conferencing yongxiang zhao yong liu changjia chen jianyin zhang ieee transactions parallel distributed systems tpds 2014">
+      <div class="pub-title">Enabling P2P One-view Multi-party Video Conferencing</div>
+      <div class="pub-authors">Yongxiang Zhao, Yong Liu, Changjia Chen, JianYin Zhang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Parallel and Distributed Systems</span>, Volume 25, Issue 1, January 2014. <a href="https://doi.org/10.1109/TPDS.2013.12" target="_blank">DOI</a></div>
+    </div>
+  </div>
+
+  <!-- ── 2013 ── -->
+  <div class="pub-year-group">
+    <div class="pub-year-heading">2013</div>
+
+    <div class="pub-item" data-cat="journal" data-text="measurement modeling video watching time large-scale internet video-on-demand system yishuai chen baoxian zhang yong liu wei zhu ieee transactions multimedia tmm 2013">
+      <div class="pub-title">Measurement and Modeling of Video Watching Time in a Large-Scale Internet Video-on-Demand System</div>
+      <div class="pub-authors">Yishuai Chen, Baoxian Zhang, Yong Liu, Wei Zhu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, Volume 15, Number 8, December 2013. <a href="https://doi.org/10.1109/TMM.2013.2280123" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="modeling analysis skype video calls rate control video quality xinggong zhang yang xu hao hu yong liu zongming guo yao wang ieee transactions multimedia tmm 2013">
+      <div class="pub-title">Modeling and Analysis of Skype Video Calls: Rate Control and Video Quality</div>
+      <div class="pub-authors">Xinggong Zhang, Yang Xu, Hao Hu, Yong Liu, Zongming Guo, Yao Wang</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Multimedia</span>, Volume 15, Number 6, October 2013. <a href="https://doi.org/10.1109/TMM.2013.2247988" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="topology mapping geolocating china internet ye tian ratan dey yong liu keith w. ross ieee transactions parallel distributed systems tpds 2013">
+      <div class="pub-title">Topology Mapping and Geolocating for China's Internet</div>
+      <div class="pub-authors">Ye Tian, Ratan Dey, Yong Liu, Keith W. Ross</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Parallel and Distributed Systems</span>, Volume 24, Issue 9, September 2013. <a href="https://doi.org/10.1109/TPDS.2012.271" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="journal" data-text="bayesian-inference recommendation online social networks xiwang yang yong liu ieee transactions parallel distributed systems tpds 2013">
+      <div class="pub-title">Bayesian-inference Based Recommendation in Online Social Networks <span class="pub-badges"><span class="pub-badge award">176 citations</span></span></div>
+      <div class="pub-authors">Xiwang Yang, Yang Guo, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">IEEE Transactions on Parallel and Distributed Systems</span>, Volume 24, Issue 4, April 2013. <a href="https://doi.org/10.1109/TPDS.2012.192" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="circle-based recommendation online social networks xiwang yang harald steck yang guo yong liu kdd 2012">
+      <div class="pub-title">Circle-based Recommendation in Online Social Networks <span class="pub-badges"><span class="pub-badge award">310 citations</span></span></div>
+      <div class="pub-authors">Xiwang Yang, Harald Steck, Yang Guo, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)</span>, Long Paper, August 2012 (acceptance ratio: 17.6%). <a href="https://doi.org/10.1145/2339530.2339728" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="top-k recommendation social networks recsys xiwang yang harald steck yong liu recsys 2012">
+      <div class="pub-title">On Top-k Recommendation using Social Networks <span class="pub-badges"><span class="pub-badge award">118 citations</span></span></div>
+      <div class="pub-authors">Xiwang Yang, Harald Steck, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">6th ACM Conference on Recommender Systems (RecSys)</span>, Long Paper, September 2012 (acceptance ratio: 20.2%). <a href="https://doi.org/10.1145/2365952.2365969" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="video telephony end-consumers measurement google+ ichat skype yang xu chenguang yu jingjiang li yong liu imc internet measurement conference 2012 best paper award">
+      <div class="pub-title">Video Telephony for End-consumers: Measurement Study of Google+, iChat, and Skype <span class="pub-badges"><span class="pub-badge award">Best Paper Award</span></span></div>
+      <div class="pub-authors">Yang Xu, Chenguang Yu, Jingjiang Li, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">ACM/USENIX Internet Measurement Conference (IMC)</span>, November 2012 (acceptance ratio: 19%). <a href="https://doi.org/10.1145/2398776.2398816" target="_blank">DOI</a></div>
+    </div>
+
+    <div class="pub-item" data-cat="conference" data-text="towards agile smooth video adaptation dynamic http streaming coNext guibin tian yong liu conext 2012">
+      <div class="pub-title">Towards Agile and Smooth Video Adaptation in Dynamic HTTP Streaming <span class="pub-badges"><span class="pub-badge award">256 citations</span></span></div>
+      <div class="pub-authors">Guibin Tian, Yong Liu</div>
+      <div class="pub-venue"><span class="venue-name">ACM CoNEXT</span>, December 2012 (acceptance ratio: 18%). <a href="https://doi.org/10.1145/2413176.2413190" target="_blank">DOI</a></div>
+    </div>
+  </div>
+
+  <!-- Notable earlier work note -->
+  <div class="older-pub-note">
+    <strong>Earlier publications (pre-2013):</strong> Selected highly-cited work includes "A Measurement Study of a Large-Scale P2P IPTV System" (<em>IEEE TMM</em> 2007, <strong>1,333 citations</strong>), "Stochastic Fluid Theory for P2P Streaming Systems" (<em>INFOCOM</em> 2007, <strong>423 citations</strong>), "A Survey on Peer-to-Peer Video Streaming Systems" (<em>PPNA</em> 2008, <strong>497 citations</strong>), and "IPTV over P2P Streaming Networks: the Mesh-pull Approach" (<em>IEEE Communications Magazine</em> 2008, <strong>233 citations</strong>).
+    For a complete list of all 150+ publications, see <a href="https://scholar.google.com/citations?user=aPlMXLAAAAAJ&sortby=pubdate" target="_blank">Google Scholar</a>.
+  </div>
+
+  </div><!-- #pubList -->
+</section>
+
+<!-- Students -->
+<section id="students">
+  <p class="section-label">Advising</p>
+  <h2>Graduate Students</h2>
+  <h3 style="font-family:Inter,sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);margin:0 0 12px;">Current PhD Students</h3>
+  <div class="student-grid">
+    <div class="student-card">
+      <div class="student-name">Xiaoyu Wang</div>
+      <div class="student-info">PhD ECE &middot; Sep 2021 –</div>
+    </div>
+    <div class="student-card">
+      <div class="student-name">Yiren Dai</div>
+      <div class="student-info">PhD ECE &middot; Jan 2022 –</div>
+    </div>
+    <div class="student-card">
+      <div class="student-name">Xiaotian Li</div>
+      <div class="student-info">PhD ECE &middot; Sep 2022 –</div>
+    </div>
+    <div class="student-card">
+      <div class="student-name">Zhixiang Zhou</div>
+      <div class="student-info">PhD ECE &middot; Sep 2025 –</div>
+    </div>
+  </div>
+
+  <h3 style="font-family:Inter,sans-serif;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg2);margin:28px 0 12px;">Selected PhD Alumni</h3>
+  <ul class="alumni-list">
+    <li><span class="alumni-name">Chen Li</span> &middot; PhD 2025 <span class="alumni-placement">→ Amazon</span></li>
+    <li><span class="alumni-name">Tongyu Zong</span> &middot; PhD 2025 <span class="alumni-placement">→ ByteDance, USA</span></li>
+    <li><span class="alumni-name">Lifan Mei</span> &middot; PhD 2022 <span class="alumni-placement">→ Amazon</span></li>
+    <li><span class="alumni-name">Liyang Sun</span> &middot; PhD 2021 <span class="alumni-placement">→ ByteDance</span></li>
+    <li><span class="alumni-name">Guangyu Li</span> &middot; PhD 2020 <span class="alumni-placement">→ Meta</span></li>
+    <li><span class="alumni-name">Eymen Kurdoglu</span> &middot; PhD 2017 <span class="alumni-placement">→ Akamai</span></li>
+    <li><span class="alumni-name">Hao Ding</span> &middot; PhD 2017 <span class="alumni-placement">→ Tumblr</span></li>
+    <li><span class="alumni-name">Yang Xu</span> &middot; PhD 2016 <span class="alumni-placement">→ Cisco/Datavisor/Meta</span></li>
+    <li><span class="alumni-name">Chenguang Yu</span> &middot; PhD 2016 <span class="alumni-placement">→ Facebook/Twitter</span></li>
+    <li><span class="alumni-name">Luqin Wang</span> &middot; PhD 2016 <span class="alumni-placement">→ Meta</span></li>
+    <li><span class="alumni-name">Guibin Tian</span> &middot; PhD 2015 <span class="alumni-placement">→ Particle News/Tencent</span></li>
+    <li><span class="alumni-name">Xiwang Yang</span> &middot; PhD 2013 <span class="alumni-placement">→ Facebook/Baidu/Tencent</span></li>
+    <li><span class="alumni-name">Chao Liang</span> &middot; PhD 2010 <span class="alumni-placement">→ Bell Labs/Apple &middot; Best Dissertation Award</span></li>
+    <li><span class="alumni-name">Hao Hu</span> &middot; PhD 2012 <span class="alumni-placement">→ Cisco</span></li>
+  </ul>
+</section>
+
+<!-- Awards -->
+<section id="awards">
+  <p class="section-label">Recognition</p>
+  <h2>Awards &amp; Honors</h2>
+  <div class="award-list">
+    <div class="award-item"><span class="award-year">2017</span><span><strong>IEEE Fellow</strong> — Institute of Electrical and Electronics Engineers</span></div>
+    <div class="award-item"><span class="award-year">2017</span><span><strong>Outstanding Junior Alumni Award</strong> — College of Engineering, University of Massachusetts, Amherst</span></div>
+    <div class="award-item"><span class="award-year">2012</span><span><strong>Best Paper Award</strong> — ACM/USENIX Internet Measurement Conference (IMC 2012)</span></div>
+    <div class="award-item"><span class="award-year">2010</span><span><strong>NSF CAREER Award</strong> — National Science Foundation</span></div>
+    <div class="award-item"><span class="award-year">2009</span><span><strong>Best Paper Award</strong> — IEEE Conference on Computer Communications (INFOCOM 2009)</span></div>
+    <div class="award-item"><span class="award-year">2008</span><span><strong>Best Paper Award</strong> — IEEE ComSoc Multimedia Communications Technical Committee (for papers published 2006–2007)</span></div>
+    <div class="award-item"><span class="award-year">2004</span><span><strong>Best Paper Award</strong> — First Workshop on Networks for Grid Applications (GridNets 2004)</span></div>
+    <div class="award-item"><span class="award-year">1997</span><span><strong>Presidential Graduate Award</strong> — Chinese Academy of Sciences</span></div>
+    <div class="award-item"><span class="award-year">1993</span><span><strong>Guo Moruo Scholarship</strong> — University of Science &amp; Technology of China (highest university scholarship)</span></div>
+  </div>
+</section>
+
+<!-- Service -->
+<section id="service">
+  <p class="section-label">Professional Service</p>
+  <h2>Selected Service</h2>
+
+  <div class="service-group">
+    <h3>Editorial</h3>
+    <ul class="service-list">
+      <li>Editor, <em>IEEE/ACM Transactions on Networking</em> (2012–2016)</li>
+      <li>Editor, <em>Elsevier Computer Networks Journal</em> (2012–2016)</li>
+    </ul>
+  </div>
+
+  <div class="service-group">
+    <h3>Conference Leadership</h3>
+    <ul class="service-list">
+      <li>General Co-Chair, IEEE/ACM International Symposium on Quality of Service (IWQoS) 2026</li>
+      <li>TPC Co-Chair, IEEE ICNP 2023</li>
+      <li>TPC Co-Chair, NOSSDAV 2022</li>
+      <li>Local Chair, ACM SIGCOMM 2020</li>
+      <li>TPC Co-Chair, ACM SIGCOMM Workshop on VR/AR Networking (2017, 2018)</li>
+      <li>General Chair, Passive and Active Measurement Conference (PAM) 2015</li>
+      <li>General Chair, IEEE Conference on Peer-to-Peer Computing 2015</li>
+      <li>Tutorials Chair, ACM SIGMETRICS 2010</li>
+    </ul>
+  </div>
+
+  <div class="service-group">
+    <h3>Technical Program Committee (Selected Recent)</h3>
+    <ul class="service-list">
+      <li>Senior Program Committee, AAAI 2026</li>
+      <li>ACM Multimedia Systems (MMSys) 2017–2026</li>
+      <li>IEEE ICDCS 2022–2026</li>
+      <li>IEEE International Conference on Network Protocols (ICNP) 2015–2024</li>
+      <li>IEEE INFOCOM 2014–2019</li>
+      <li>ACM Multimedia 2013–2025</li>
+    </ul>
+  </div>
+</section>
+
+</div><!-- .wrap -->
+
+<footer>
+  <div class="wrap">
+    Yong Liu &middot; NYU Tandon School of Engineering &middot; Department of Electrical &amp; Computer Engineering &middot;
+    370 Jay Street, Brooklyn, NY 11201 &middot;
+    <a href="mailto:yongliu@nyu.edu">yongliu@nyu.edu</a> &middot;
+    <a href="https://engineering.nyu.edu/faculty/yong-liu" target="_blank">NYU Official Page</a>
+  </div>
+</footer>
+
+<script>
+var activeFilter = 'all';
+
+function setFilter(btn, cat) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  filterPubs();
+}
+
+function filterPubs() {
+  var q = document.getElementById('pubSearch').value.toLowerCase().trim();
+  var items = document.querySelectorAll('.pub-item');
+  var groups = document.querySelectorAll('.pub-year-group');
+
+  items.forEach(function(item) {
+    var matchCat = activeFilter === 'all' || item.dataset.cat === activeFilter;
+    var matchQ = q === '' || item.dataset.text.indexOf(q) !== -1
+      || item.textContent.toLowerCase().indexOf(q) !== -1;
+    item.style.display = (matchCat && matchQ) ? '' : 'none';
+  });
+
+  // hide empty year groups
+  groups.forEach(function(group) {
+    var visible = Array.from(group.querySelectorAll('.pub-item'))
+      .some(function(i) { return i.style.display !== 'none'; });
+    group.style.display = visible ? '' : 'none';
+  });
+}
+</script>
